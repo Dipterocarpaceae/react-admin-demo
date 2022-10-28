@@ -1,30 +1,24 @@
 import React, { useMemo, CSSProperties } from 'react';
 import { useGetList } from 'react-admin';
 import { useMediaQuery, Theme } from '@mui/material';
-import { subDays, startOfDay } from 'date-fns';
 
-import Welcome from './Welcome';
-import MonthlyRevenue from './MonthlyRevenue';
-import NbNewOrders from './NbNewOrders';
-import PendingOrders from './PendingOrders';
-import PendingReviews from './PendingReviews';
-import NewCustomers from './NewCustomers';
-import OrderChart from './OrderChart';
 
 import { Order } from '../types';
+import UserCount from './UserCount';
+import TodoCount from './TodoCount';
 
-interface OrderStats {
-    revenue: number;
-    nbNewOrders: number;
-    pendingOrders: Order[];
-}
+// interface OrderStats {
+//     revenue: number;
+//     nbNewOrders: number;
+//     pendingOrders: Order[];
+// }
 
-interface State {
-    nbNewOrders?: number;
-    pendingOrders?: Order[];
-    recentOrders?: Order[];
-    revenue?: string;
-}
+// interface State {
+//     nbNewOrders?: number;
+//     pendingOrders?: Order[];
+//     recentOrders?: Order[];
+//     revenue?: string;
+// }
 
 const styles = {
     flex: { display: 'flex' },
@@ -44,99 +38,46 @@ const Dashboard = () => {
     const isSmall = useMediaQuery((theme: Theme) =>
         theme.breakpoints.down('lg')
     );
-    const aMonthAgo = useMemo(() => subDays(startOfDay(new Date()), 30), []);
 
-    const { data: orders } = useGetList<Order>('commands', {
-        filter: { date_gte: aMonthAgo.toISOString() },
-        sort: { field: 'date', order: 'DESC' },
-        pagination: { page: 1, perPage: 50 },
-    });
+    const { data: users } = useGetList('users', { pagination: { page: 1, perPage: 300 } });
+    const { data: todos } = useGetList('todos', { pagination: { page: 1, perPage: 300 } });
 
-    const aggregation = useMemo<State>(() => {
-        if (!orders) return {};
-        const aggregations = orders
-            .filter(order => order.status !== 'cancelled')
-            .reduce(
-                (stats: OrderStats, order) => {
-                    if (order.status !== 'cancelled') {
-                        stats.revenue += order.total;
-                        stats.nbNewOrders++;
-                    }
-                    if (order.status === 'ordered') {
-                        stats.pendingOrders.push(order);
-                    }
-                    return stats;
-                },
-                {
-                    revenue: 0,
-                    nbNewOrders: 0,
-                    pendingOrders: [],
-                }
-            );
-        return {
-            recentOrders: orders,
-            revenue: aggregations.revenue.toLocaleString(undefined, {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-            }),
-            nbNewOrders: aggregations.nbNewOrders,
-            pendingOrders: aggregations.pendingOrders,
-        };
-    }, [orders]);
+    let countUsers = users?.length;
+    let countTodos = todos?.length;
 
-    const { nbNewOrders, pendingOrders, revenue, recentOrders } = aggregation;
     return isXSmall ? (
         <div>
             <div style={styles.flexColumn as CSSProperties}>
-                <Welcome />
-                <MonthlyRevenue value={revenue} />
+                <UserCount value={countUsers} />
+
                 <VerticalSpacer />
-                <NbNewOrders value={nbNewOrders} />
+
+                <TodoCount value={countTodos} />
+
                 <VerticalSpacer />
-                <PendingOrders orders={pendingOrders} />
             </div>
         </div>
     ) : isSmall ? (
         <div style={styles.flexColumn as CSSProperties}>
-            <div style={styles.singleCol}>
-                <Welcome />
-            </div>
             <div style={styles.flex}>
-                <MonthlyRevenue value={revenue} />
+                <UserCount value={countUsers} />
                 <Spacer />
-                <NbNewOrders value={nbNewOrders} />
-            </div>
-            <div style={styles.singleCol}>
-                <OrderChart orders={recentOrders} />
-            </div>
-            <div style={styles.singleCol}>
-                <PendingOrders orders={pendingOrders} />
+                <TodoCount value={countTodos} />
             </div>
         </div>
     ) : (
         <>
-            <Welcome />
             <div style={styles.flex}>
                 <div style={styles.leftCol}>
                     <div style={styles.flex}>
-                        <MonthlyRevenue value={revenue} />
+                        <UserCount value={countUsers} />
                         <Spacer />
-                        <NbNewOrders value={nbNewOrders} />
-                    </div>
-                    <div style={styles.singleCol}>
-                        <OrderChart orders={recentOrders} />
-                    </div>
-                    <div style={styles.singleCol}>
-                        <PendingOrders orders={pendingOrders} />
+                        <TodoCount value={countTodos} />
                     </div>
                 </div>
                 <div style={styles.rightCol}>
                     <div style={styles.flex}>
-                        <PendingReviews />
                         <Spacer />
-                        <NewCustomers />
                     </div>
                 </div>
             </div>

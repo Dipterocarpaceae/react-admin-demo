@@ -8566,6 +8566,14 @@ ra-data-graphql@^4.0.0-beta.2, ra-data-graphql@^4.4.3:
     lodash "~4.17.5"
     pluralize "~7.0.0"
 
+ra-data-json-server@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/ra-data-json-server/-/ra-data-json-server-4.4.4.tgz#99f4d464b82365b54d41d31879554bad75900651"
+  integrity sha512-+tdT/5FFsGUPN0aLUGtodD8qbGfIEdexz+td6VpfXEetpHD6gOURsjDCmCuWYGv3ga/Tw1JiWm5zul7GVA2Sjg==
+  dependencies:
+    query-string "^7.1.1"
+    ra-core "^4.4.4"
+
 ra-data-simple-rest@^4.0.0:
   version "4.4.4"
   resolved "https://registry.yarnpkg.com/ra-data-simple-rest/-/ra-data-simple-rest-4.4.4.tgz#d21f20581e3841e2294c1d4b881f7c2f0f0cb689"

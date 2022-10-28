@@ -15,9 +15,12 @@ import products from './products';
 import invoices from './invoices';
 import categories from './categories';
 import reviews from './reviews';
-import dataProviderFactory from './dataProvider';
+// import dataProviderFactory from './dataProvider';
 import Configuration from './configuration/Configuration';
 import Segments from './segments/Segments';
+import jsonServerProvider from 'ra-data-json-server';
+
+const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
 
 const i18nProvider = polyglotI18nProvider(locale => {
     if (locale === 'fr') {
@@ -32,9 +35,11 @@ const App = () => {
     return (
         <Admin
             title=""
-            dataProvider={dataProviderFactory(
-                process.env.REACT_APP_DATA_PROVIDER || ''
-            )}
+            // dataProvider={dataProviderFactory(
+            //     process.env.REACT_APP_DATA_PROVIDER || ''
+            // )}
+
+            dataProvider={dataProvider}
             authProvider={authProvider}
             dashboard={Dashboard}
             loginPage={Login}
