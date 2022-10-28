@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { List, Datagrid, TextField, EmailField, UrlField, TextInput, ReferenceInput } from 'react-admin'
-import { Box } from '@mui/material';
+import { List, Datagrid, TextField, EmailField, TextInput } from 'react-admin'
 import Aside from './Aside';
 
 const userFilters = [

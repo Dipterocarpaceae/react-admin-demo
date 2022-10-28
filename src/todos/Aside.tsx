@@ -2,11 +2,9 @@ import { Card, CardContent } from '@mui/material';
 import {
     FilterLiveSearch,
     SavedQueriesList,
-    useRecordContext,
 } from 'react-admin';
 
 const Aside = () => {
-    const record = useRecordContext();
 
     return (
         <Card
