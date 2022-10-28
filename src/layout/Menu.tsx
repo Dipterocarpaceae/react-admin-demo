@@ -58,7 +58,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                 dense={dense}
             >
                 <MenuItemLink
-                    to="/customers"
+                    to="/users"
                     state={{ _scrollToTop: true }}
                     primaryText={"Users"}
                     leftIcon={<visitors.icon />}
